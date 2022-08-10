@@ -3,21 +3,21 @@
 
 Project
 Maven -> 과거
-Gradle -> 요즘 추세, 많이씀 (추천)
+Gradle -> 요즘 추세, 많이씀 (추천) <br>
 
-Language -> Java
+Language -> Java<br>
 
 Spring Boot
 SNAPSHOT -> 만들고 있는 버전, M1 -> 정식 release된 버전이 아님
-정식 release 중에서 가장 높은 버전 선택하기
+정식 release 중에서 가장 높은 버전 선택하기<br>
 
 Project Metadata
 Group -> 기업 도메인명같은걸 적어줌 (처음은 상관없으니 hello라 함)
-Artifact -> Build된 뒤 나오는 어떤 결과물
+Artifact -> Build된 뒤 나오는 어떤 결과물<br>
 
 Dependencies
 스프링 기반으로 프로젝트를 생성을 할건데, 어떤 라이브러리를 땡겨 쓸거냐 하는 것
-Spring Web, Thymeleaf (Template Engines) 선택
+Spring Web, Thymeleaf (Template Engines) 선택<br>
 
 GENERATE 누르면 다운 후 IntelliJ에서 build.gradle로 열기
 
@@ -25,21 +25,21 @@ GENERATE 누르면 다운 후 IntelliJ에서 build.gradle로 열기
 Maven, Gradle 어떤걸 써도 main, test로 나눠져 있음
 test밑에는 test코드가 들어있음
 -> 있는 이유는 test코드가 정말 중요하기 때문에
-main의 resources파일은 java파일을 제외한 모든 파일은 다 여기 존재
+main의 resources파일은 java파일을 제외한 모든 파일은 다 여기 존재<br>
 
-build.gradle의 dependencies에 있는 것들을 다운받아서 사용하는데, repositories의 mavenCentral에서 다운받아서 써라는 얘기
+build.gradle의 dependencies에 있는 것들을 다운받아서 사용하는데, repositories의 mavenCentral에서 다운받아서 써라는 얘기<br>
 
 .gitignore파일 -> git에는 소스코드를 제외한 결과물은 올라가면 안되는데 그걸 제외해주는 파일
 
-환경설정의 compact middle packages 체크시에 폴더이름을 hello, hellospring에서 합쳐줌
+환경설정의 compact middle packages 체크시에 폴더이름을 hello, hellospring에서 합쳐줌<br>
 
 HelloSpringApplication에서 run시키면 port번호 8080(http)뜸
 그럼 웹페이지에서 localhost:8080 들어가면 Whitelabel Error Page라고 뜸
-중지버튼 누르면 없어짐
+중지버튼 누르면 없어짐<br>
 
 라이브러리
 spring-boot-starter-web이 필요하지만 의존관계에 있는 것들을 땡겨옴
-오른쪽버튼에서 Gradle을 눌러보면 의존관계 확인가능
+오른쪽버튼에서 Gradle을 눌러보면 의존관계 확인가능<br>
 
 현업에서는 sysout말고 로그를 이용함
 
@@ -53,7 +53,7 @@ spring-boot-starter(공통): 스프링 부트 + 스프링 코어 + 로깅
     spring-boot-starter-logging
         logback, slf4j  
 
-resources/static 폴더에서 index.html파일을 만들어주면 static은 정적인 것이니 변하지 않는 Welcome Page(홈)를 만들 수 있다.
+resources/static 폴더에서 index.html파일을 만들어주면 static은 정적인 것이니 변하지 않는 Welcome Page(홈)를 만들 수 있다.<br>
 
 <!DOCTYPE HTML>
 <html>
@@ -67,7 +67,7 @@ Hello
 </body>
 </html>
 
-치고 중지하고 키면 만들어짐
+치고 중지하고 키면 만들어짐<br>
 
 Welcome Page는 index.html에서 찾고 없다면 index 템플릿에서 찾는다.
 
@@ -88,9 +88,9 @@ public String hello(Model model) {
 </body>
 </html>
 
-결과 : localhost:8080/hello 로 들어가보면 나옴
+결과 : localhost:8080/hello 로 들어가보면 <br>
 
-동작 환경 그림
+동작 환경 그림<br>
 ![](../spring%20동작%20환경%20그림.png)
 스프링 부트는 내장 톰캣 서버를 내장하고 있어서 받으면 helloController에 있는 return값이 hello니까 resources/templates폴더에서 hello.html로 찾아가서 실행해라는 의미 
 
