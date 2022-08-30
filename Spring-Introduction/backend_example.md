@@ -17,6 +17,10 @@
 domain/Member -> 멤버 저장
 repository/ -> 회원 객체를 저장하는 저장소
 
+*전체 틀*
+![](일반적인%20웹%20애플리케이션%20계층%20구조.png)
+![](클래스%20의존관계.png)
+
 *회원 도메인과 리포지토리 만들기* <br>
 회원 객체, (domain/member)
 -> id는 시스템이 정해주는 것
@@ -51,6 +55,7 @@ validateDuplicateMember는 같은 이름이 있는 중복 회원을 안받게 �
 원래 findByName은 Optional로 받는데, 받자마자 확인하는 것
 findByName을 하고 그 결과는 Optional멈버니까, 바로 Optioanl멤버.ifPresent하고
 이미 있으면 중복이름이 있다는 뜻이니 예외처리.
+ifPresent안에서 사용된 람다는 자바문법에 정리.
 
 *회원 서비스 테스트* <br>
 test할 때는 처음에 given / when / then 문법으로 하기
@@ -84,7 +89,7 @@ memberService = new MemberService(memberRepository);
 
 *스프링 빈과 의존관계* <br>
 
-스프일 빈을 등록하는 2가지 방법
+스프링 빈을 등록하는 2가지 방법
 1. 컴포넌트 스캔과 자동 의존관계 설정
 
 @Controller라는 어노테이션이 있으면, 
@@ -97,9 +102,11 @@ class MemberController 객체를 생성해서 스프링 컨테이너에 넣어�
 MemberController에서 
 MemberService memberService = new MemberService(); 를 가져다 쓸 수도 있다만, 
 스프링이 관리를 하게되면, 스프링 컨테이너에 등록을 하고 거기서 받아쓰도록 바꾸어야 함.
-여러 컨트롤러에서도 MemberService를 가져다 쓸 수 있는데, 별 기능이 없어서 여러 객체를 생성할 필요가 없다. 하나만 생성해놓고 같이 쓰면 되는 것.
+스프링 컨테이너에 등록하면 딱 하나만 등록이 됨.
+여러 컨트롤러에서도 MemberService를 가져다 쓸 수 있는데, 별 기능이 없어서 여러 객체를 생성할 필요가 없다.
+하나만 생성해놓고 같이 쓰면 되는 것.
 
-@AutoWired -> 스프링 컨테이너에서 가져다 씀
+@AutoWired -> 스프링 컨테이너에서 가져다 씀, 연결시켜 준다. 
 생성자를 만들고 @AutoWired를 붙였을 때, error가 뜨는 이유는 
 MemberService가 스프링 빈으로 등록되어 있지 않아서 가져다 쓸 수 없는 것.
 
@@ -110,6 +117,8 @@ MemoryMemberRepository로 가서 @Repository 추가
 (다 이름에 맞게 추가해줌)
 
 그럼 스프링이 처음 뜰 때, Repository, Service, Controller를 다 가지고 올라온다.
+
+
 
 ![](스프링%20빈%20등록%20그림.png)
 Controller와 Service를 연결시켜줄 때 AutoWired사용
@@ -122,17 +131,34 @@ Controller의 생성자에다가 AutoWired를 쓰면, 생성이 될 때, 스프�
 원래는 @Service 말고 @Component를 써야 하는데, @Service안에 @Component가 포함되어서 가능
 @Controller, @Service, @Repository 다 동일
 
-우리가 HelloSpringApplication을 실행했기 때문에 그걸 포함한 hello.hellospring이라는 package에 속하는 하위 파일들만 다 찾아서 어노테이션이 붙은 것들은 다 등록시킨다.
+우리가 main method인 HelloSpringApplication을 실행했기 때문에 그걸 포함한 hello.hellospring이라는 package에 속하는 하위 파일들만 다 찾아서 어노테이션이 붙은 것들은 다 등록시킨다.
 그 이외의 파일들에서 아무리 @Service같은 어노테이션을 붙여도 등록되지 않음.
+--> 그럼 이 package 안에 HelloController, MemberController 둘다 등록 된것 인가???
 
 스프링은 스프링 컨테이너에 스프링 빈을 등록할 때, 기본으로 싱글톤으로 등록한다(유일하게 하나만 등록해서 공유한다)
+싱글톤이란 : memberService 여러개를 만들지 않고, 딱 1개만 만들어서 공유해서 쓴다고 생각하면 됨.
 따라서 같은 스프링 빈이면 모두 같은 인스턴스다.
 설정으로 싱글톤이 아니게 설정할 수 있지만, 특별한 경우를 제외하면 대부분 싱글톤을 사용한다
 
--요약-
+---요약---
 스프링이 올라올때, Component관련된 어노테이션이 있으면 그것들을 다 객체를 생성해서 스프링 컨테이너에 등록을 해놓는다.
 AutoWierd는 화살표, 연관관계를 연결해줌
 
 2. 자바 코드로 직접 스프링 빈 등록하기
+
+@Controller를 사용하지 않고, 
+
 새로운 SpringConfig 라는 Class를 하나 만들고 
 @Bean 어노테이션을 통해서 스프링 빈을 등록한다는걸 알려주기
+
+DI에는 3가지. 생성자 주입, 필드 주입, setter 주입(누군가가 set할 수 있어서 변경가능성 있음)이 있음.
+우리가 쓴것도 생성자 주입, 권장.
+
+직접 등록의 장점 : 나중에 DB를 변경해야 하는 상황이 생기면,
+MemoryMemberRepository -> DBMemberRepository로 변경할 때, SpringConfig클래스에서 이름만 바꿔주면 되지만,
+컴포넌트 스캔으로 되어있다면, 여러가지를 바꿔줘야하는 불편함이 있다.
+단점 : 귀찮음
+
+@Autowired를 통한 DI는 helloController, memberService와 같이
+스프링 빈으로 등록해서, 스프링이 관리하는 객체에서만 동작한다.
+내가 직접 생성한 객체에서는 동작하지 않는다.

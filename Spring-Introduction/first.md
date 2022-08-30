@@ -37,7 +37,7 @@ HelloSpringApplication에서 run시키면 port번호 8080(http)뜸
 그럼 웹페이지에서 localhost:8080 들어가면 Whitelabel Error Page라고 뜸
 중지버튼 누르면 없어짐<br>
 
-라이브러리
+*라이브러리*
 spring-boot-starter-web이 필요하지만 의존관계에 있는 것들을 땡겨옴
 오른쪽버튼에서 Gradle을 눌러보면 의존관계 확인가능<br>
 
@@ -54,7 +54,9 @@ spring-boot-starter(공통): 스프링 부트 + 스프링 코어 + 로깅
         logback, slf4j  
 
 resources/static 폴더에서 index.html파일을 만들어주면 static은 정적인 것이니 변하지 않는 Welcome Page(홈)를 만들 수 있다.<br>
-
+head가 설명
+bod
+```
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -66,7 +68,7 @@ Hello
 <a href="/hello">hello</a>
 </body>
 </html>
-
+```
 치고 중지하고 키면 만들어짐<br>
 
 Welcome Page는 index.html에서 찾고 없다면 index 템플릿에서 찾는다.
@@ -77,6 +79,8 @@ public String hello(Model model) {
     model.addAttribute("data", "hello!!");
     return "hello";
 
+localhost:8080/hello 로 호출
+```
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -87,16 +91,18 @@ public String hello(Model model) {
 <p th:text="'안녕하세요. ' + ${data}" >안녕하세요. 손님</p>     -> ${data}가 위의 77라인의 attributeValue인 hello!!로 치환됨
 </body>
 </html>
-
+```
 결과 : localhost:8080/hello 로 들어가보면 <br>
+뒤에 붙은 hello가 @GetMapping("hello")에 맵핑이 되서 hello를 return
+
+컨트롤러에서 리턴 값으로 문자를 반환하면 뷰 리졸버( viewResolver )가 화면을 찾아서 처리한다.
+스프링 부트 템플릿엔진 기본 viewName 매핑
+resources:templates/ +{ViewName}+ .html
 
 동작 환경 그림<br>
 ![](../spring%20동작%20환경%20그림.png)
 스프링 부트는 내장 톰캣 서버를 내장하고 있어서 받으면 helloController에 있는 return값이 hello니까 resources/templates폴더에서 hello.html로 찾아가서 실행해라는 의미 
 
-컨트롤러에서 리턴 값으로 문자를 반환하면 뷰 리졸버( viewResolver )가 화면을 찾아서 처리한다.
-스프링 부트 템플릿엔진 기본 viewName 매핑
-resources:templates/ +{ViewName}+ .html
 
 빌드하고 실행하기
 https://www.inflearn.com/questions/397942   -> 나와 동일한 오류로 안됨
@@ -141,7 +147,9 @@ hello-static.html 라는 이름으로 파일을 만들면 localhost:8080 뒤에 
 localhost:8080/hello-static.html 로 들어갈 수 있음
 
 ![](../정적%20컨텐츠.png)
-주소로 들어가면 1. 첫번째로 컨트롤러에서 찾는다.
+주소로 들어가면 
+첫번째로 컨트롤러에서 찾는다.
+관련 컨트롤러가 없으니 resources/static 폴더에서 찾음
 
 *MVC와 템플릿 엔진* <br>
 Controller와 resources/template 폴더에서 찾아서 실행
@@ -150,18 +158,23 @@ view -> 화면과 관련된 일만
 controller -> 서버뒷단에 관련된건 다 controller에서 처리
 다 처리하고 화면에서 필요한 것들을 담아 model에게 넘겨주는 패턴을 사용
 
-resources/template/hello-template.html -> view
+1 에서는 html 자체를 여는 것
+2 에서는 controller를 통해서 html로 연결이 되서 여는 것?
+
+1. resources/template/hello-template.html -> view
+```
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <p th:text="'hello ' + ${name}">hello! empty</p>
 </body>
 </html>
+```
+view에 있는 hello! empty는 없어도 되지만, 파일 자체의 absolute path를 copy해서 인터넷에 쳐보면 파일을 그냥 여는 것.  
 
-view에 있는 hello! empty는 없어도 되지만, 파일 자체의 absolute path를 copy해서 인터넷에 쳐보면 파일을 그냥 여는 것. 
 thymeleaf 템플릿의 장점은 html을 쓰고 서버없이 파일을 열어봐도 껍데기를 볼 수 있다( hello! empty)
 근데 템플릿 엔진으로써 동작을 하면, 실제로 서버를 타고 돌면 hello + ${name} 값으로 바뀜
 <p th:text="'hello ' + ${name}">hello! empty</p>
-
+```
 @Controller
 public class HelloController {
  @GetMapping("hello-mvc")
@@ -170,14 +183,14 @@ public class HelloController {
  return "hello-template";       -> hello-template으로 간다
  }
 }
-
-웹을 열때, localhost:8080/hello-mvc로 열면 warning이 뜸
+```
+1. 웹을 열때, localhost:8080/hello-mvc로 열면 warning이 뜸
 Required request parameter 'name' for method parameter type String is not present
 이유는 : parameter를 안넘겨줘서 그럼
 해결법 : localhost:8080/hello-mvc?name=spring!!!!!
 -> ?(물음표)뒤에 인자를 넘겨주면 됨
 
-165라인에서 @REquestParam에서 required 기본값이 true여서 무조건 인자를 넘겨야함
+165라인에서 @RequestParam에서 required 기본값이 true여서 무조건 인자를 넘겨야함
 
 ![](../MVC,%20템플릿%20엔진%20이미지.png)
 이번엔 helloController에 mapping이 되어있어서 그 메소드를 호출해줌, 넘긴 인자를 토대로
@@ -188,19 +201,24 @@ templates에서 return값인 hello-template와 동일한 이름을 찾아서 실
 *API* <br>
 정적 컨텐츠를 제외하면 MVC나 API 둘 중 하나라고 생각
 
+*템플릿 엔진과의 차이는 view가 없이 저 문자 그대로 내려감
+
+Controller 폴더 안에서 
+
+localhost:8080/hello-api?name=spring!!!!!
+```
 @GetMapping("hello-string")
    @ResponseBody
    public String helloString(@RequestParam("name") String name) {
         return "hello" + name;  // name에 string을 넣으면 hello string
    }
-
+```
 @ResponseBody -> http는 헤더부와 body부가 있는데, body에 이 데이터를 직접 넣어주겠다는 의미
-템플릿 엔진과의 차이는 view가 없이 저 문자 그대로 내려감
 페이지 소스보기를 해보면 앞에서는 html태그가 있었는데, 저 문자 하나만 그대로 전달됨 
 
-localhost:8080/hello-api?name=spring!!!!!
-json방식으로 나옴 key : value 형식으로
 @ResponseBody -> 기본이 json방식
+json방식으로 나옴 key : value 형식으로
+{ hello : spring }
 
 ![](../@ResponseBody%20사용%20원리.png)
 원래는 viewResolver라는 애가 동작하는데,
