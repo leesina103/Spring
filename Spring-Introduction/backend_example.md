@@ -133,7 +133,8 @@ Controller의 생성자에다가 AutoWired를 쓰면, 생성이 될 때, 스프�
 
 우리가 main method인 HelloSpringApplication을 실행했기 때문에 그걸 포함한 hello.hellospring이라는 package에 속하는 하위 파일들만 다 찾아서 어노테이션이 붙은 것들은 다 등록시킨다.
 그 이외의 파일들에서 아무리 @Service같은 어노테이션을 붙여도 등록되지 않음.
---> 그럼 이 package 안에 HelloController, MemberController 둘다 등록 된것 인가???
+--> 그럼 이 package 안에 HelloController, MemberController 둘다 등록 된것 인가??? 
+해보니까 hello, hello-mvc?name=spring 둘다 실행됨
 
 스프링은 스프링 컨테이너에 스프링 빈을 등록할 때, 기본으로 싱글톤으로 등록한다(유일하게 하나만 등록해서 공유한다)
 싱글톤이란 : memberService 여러개를 만들지 않고, 딱 1개만 만들어서 공유해서 쓴다고 생각하면 됨.
@@ -157,6 +158,7 @@ DI에는 3가지. 생성자 주입, 필드 주입, setter 주입(누군가가 se
 직접 등록의 장점 : 나중에 DB를 변경해야 하는 상황이 생기면,
 MemoryMemberRepository -> DBMemberRepository로 변경할 때, SpringConfig클래스에서 이름만 바꿔주면 되지만,
 컴포넌트 스캔으로 되어있다면, 여러가지를 바꿔줘야하는 불편함이 있다.
+(나중 jpa에서는 직접 등록)
 단점 : 귀찮음
 
 @Autowired를 통한 DI는 helloController, memberService와 같이

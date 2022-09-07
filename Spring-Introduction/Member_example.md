@@ -6,7 +6,7 @@ home.html로 가서 Welcome Page를 띄움
 
 ---궁금한 점---
 "/" 가 왜 mapping이 되는 건지??
-여기서도 Controller 3개가 다 올라가 있는건가?
+여기서도 Controller 3개가 다 올라가 있는건가? -> 맞음 ㅇㅇㅇ
 
 index.html에서 사용된다고 했는데, 이건 Controller가 없을때만 사용되는 것
 
@@ -25,7 +25,7 @@ MemberForm 클래스의 멤버변수 name과
 resources/templates/members/createMemberForm 에 있는, name이 매칭되서 들어옴.
 들어올 때, post방식으로 들어와서
 @PostMapping에 걸림.
-member에 저장을 하고, memberService의 join에서 가입을 시킨 후,
+이름만 받으니까 MemberForm에 저장 후, 값을 빼와서 다시 member에 저장을 하고, memberService의 join에서 가입을 시킨 후,
 return 값인 redirect:/ 를 타고 홈 화면으로 다시 돌아오게 됨.
 
 Mapping에서 url은 동일하지만, post냐 Get이냐에 따라서 달라짐
@@ -59,7 +59,7 @@ java -version을 하면, 자꾸 openJDK 설치한 것이 떠서 그런지
 vi h2.sh 파일에서 java 명령어가 있는데, 자꾸 에러가 뜬다. 해결 못함.
 https://tjddnjs.tistory.com/145
 
-일단, cmd에서 h2.bat으로 실행시켜서
+일단, cmd에서 h2.bat으로 실행시켜서 or 파일 클릭
 cd ../../Workspace/H2/bin
 처음 생성시, jdbc:h2:~/test 이걸로 연결시키면,
  ( ~/test  -> 홈에 있는 test폴더 )
@@ -103,15 +103,15 @@ JdbcMemberRepository(dataSource) 생성자의 인자에 넣는 dataSource는 DB�
 (?? 이해 잘 안됨)DataSource는 데이터베이스 커넥션을 획득할 때 사용하는 객체다. 스프링 부트는 데이터베이스 커넥션
 정보를 바탕으로 DataSource를 생성하고 스프링 빈으로 만들어둔다. 그래서 DI를 받을 수 있다.
 
-<!-- https://bkim.tistory.com/22 -->
 Spring boot 2.1 부터는 bean definition overriding이 false이므로, (@Controller와 중복되서 그런듯)
+<!-- https://bkim.tistory.com/22 -->
 application파일에 아래 코드를 추가해줘야 한다.
 ```
 spring.main.allow-bean-definition-overriding: true
 ```
 
 SpringConfig 클래스의 memberRepository를 MemoryMemberRepository가 아닌,
-JdbcMemberRepository로만 바꿔주면 h2로 만든 DB인
+JdbcMemberRepository로만 바꿔주면(스프링 빈으로 등록한 이유) h2로 만든 DB인
 jdbc:h2:tcp://localhost/~/test 로 접근해서 사용가능.
 
 ![](스프링%20설정%20이미지,%20jdbc로%20저장소%20변경.png)
